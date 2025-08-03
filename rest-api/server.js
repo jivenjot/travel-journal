@@ -16,9 +16,17 @@ dotenv.config();
 
 const app = express();
 
+// ✅ Middleware: CORS with Vercel frontend allowed
+app.use(cors({
+    origin: [
+        'http://localhost:3000',
+        'https://travel-frontend-rosy.vercel.app'
+    ],
+    credentials: true,
+}));
+
 // Middleware
-app.use(cors());
-app.use(express.json({ limit: '10mb' })); // Increased limit for photo uploads
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Routes
@@ -28,7 +36,7 @@ app.use('/api/entries', entriesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/search', searchRouter);
 app.use('/api', externalRouter);
-app.use('/flights', flightsRouter); // Keep existing flights route
+app.use('/flights', flightsRouter);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -44,5 +52,3 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Travel Journal REST API running at http://localhost:${PORT}`);
 });
-
-
